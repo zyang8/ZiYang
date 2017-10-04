@@ -1,0 +1,19 @@
+Define variables:
+i = 1, 2, 3, 4;
+xi = units purchased below or equal to 200 in mouth i;
+yi = units purchased above 200 in month i;
+si = the stock stored at the end of month i;
+
+```{r}
+library(lpSolveAPI)
+Z <- read.lp("ZiYang Assignment3.lp")
+Z
+solve(Z)
+get.objective(Z)
+get.constraints(Z)
+get.variables(Z)
+get.basis(Z)
+get.sensitivity.objex(Z)
+get.sensitivity.rhs(Z)
+```
+
