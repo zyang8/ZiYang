@@ -3,6 +3,7 @@ i = 1, 2, 3, 4;
 xi = units purchased below or equal to 200 in mouth i;
 yi = units purchased above 200 in month i;
 si = the stock stored at the end of month i;
+ai = 1 if units purchased above 200 in month i;
 
 ```{r}
 library(lpSolveAPI)
@@ -13,7 +14,6 @@ get.objective(Z)
 get.constraints(Z)
 get.variables(Z)
 get.basis(Z)
-get.sensitivity.objex(Z)
-get.sensitivity.rhs(Z)
 ```
 
+I found there is no need for sensitivity analysis, since we can always get the same answer. 
