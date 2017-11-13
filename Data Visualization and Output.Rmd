@@ -1,0 +1,83 @@
+```{r}
+# Bar chart
+library(ggplot2)
+barplot(iris$Sepal.Length)
+# Change the color to make the graphic clear
+barplot(iris$Sepal.Length, col = brewer.pal(5,"Set1"))
+# Stacked bar chart
+barplot(table(iris$Species,iris$Sepal.Length),col  = brewer.pal(3,"Set1"))
+```
+
+
+```{r}
+# Stacked bar chart
+
+library(ggplot2)
+
+Year <- c(rep(c("2010", "2011", "2012", "2013"), each = 4))
+Category <- c(rep(c("A", "B", "C", "D"), times = 4))
+Frequency <- c(150, 250, 225, 345, 215, 435, 315, 360, 425, 650, 235, 690, 165, 465, 280, 255)
+Data <- data.frame(Year, Category, Frequency)
+
+myplot <- ggplot(Data, aes(x = Year, y = Frequency, fill = Category, label = Frequency)) + geom_bar(stat = "identity") + geom_text(size = 3, position = position_stack(vjust = 0.5))
+myplot
+
+
+```
+```{r}
+# Pie Chart
+library(ggplot2)
+slices <- c(10, 12, 4, 16, 8)
+country <- c("US","UK","Australia","Germany","France")
+pie(slices, labels = country, main = "Pie Chart")
+
+# add the percentage of each country in the pie and change a color
+pct <- round(slices / sum(slices) * 100)
+country <- paste(country, " ", pct, "%", seq="")
+pie(slices, labels = country, main = "Pie Chart %", col = rainbow(5))
+```
+```{r}
+# Histogram
+library(ggplot2)
+data("VADeaths")
+hist(VADeaths, breaks = 10, col = brewer.pal(3,"Set1"), main = "VADeaths")
+```
+```{r}
+# Line Chart - simple
+library(ggplot2)
+plot(airmiles)
+```
+```{r}
+# Scatter Plot
+library(ggplot2)
+# simple
+plot(x=airquality$Temp)
+# multivariate
+plot(x=airquality$Temp, y=airquality$Month)
+
+# view the whole table
+plot(airquality)
+
+# also can change the color
+plot(airquality, col = brewer.pal(1, "Set1"))
+```
+
+```{r}
+# Output the graphics to PPT
+
+# save chart to a temporary file which would use later and delete
+ggsave(my_temp_file<-paste(tempfile(),".wmf",sep=""), plot=myplot)
+
+# create a new PPT
+# ONLY NEED DONE ONCE
+library(R2PPT)
+myppt <- PPT.Init(method = "RDCOMClient")
+
+# add a blank slide and add the chart to slide
+myppt <- PPT.AddBlankSlide(myppt)
+myppt <- PPT.AddGraphicstoSlide(myppt, file = my_temp_file)
+
+# delete the temporary file
+unlink(my_temp_file)
+```
+
