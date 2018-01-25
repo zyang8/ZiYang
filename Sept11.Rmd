@@ -1,0 +1,64 @@
+---
+title: "Sept11 Time Series"
+output: html_notebook
+---
+
+1.The goal of this study is descriptive.
+
+2.Plot each of the three pre-event time series
+```{r}
+Sept11.data <- read.csv("D://1 KSU//MSBA//ST in Business//Assignment//Sept11Travel.csv")
+View(Sept11.data)
+library(ISLR)
+library(forecast)
+```
+
+```{r}
+#Plot Air
+Sept11Air.ts <- ts(Sept11.data$Air.RPM..000s., start = c(1990, 1), end = c(2001, 8), freq = 12)
+plot(Sept11Air.ts, xlab = "Time", ylab = "Air RPM (000s)", ylim = c(20000000, 70000000))
+
+#Plot Rail
+Sept11Rail.ts <- ts(Sept11.data$Rail.PM, start = c(1990, 1), end = c(2001, 8), freq = 12)
+plot(Sept11Rail.ts, xlab = "Time", ylab = "Rail PM", ylim = c(300000000, 700000000))
+
+#Plot Car
+Sept11Car.ts <- ts(Sept11.data$VMT..billions., start = c(1990, 1), end = c(2001, 8), freq = 12)
+plot(Sept11Car.ts, xlab = "Time", ylab = "VMT (billions)", ylim = c(150, 270))
+```
+
+2.1.Trend and seasonality appear from the plot.
+
+2.2.Change the scale of the series:
+```{r}
+#Change the scale for Air
+Sept11Air.ts.3yrs <- window(Sept11Air.ts, start = c(1999, 1), end = c(2001, 8))
+plot(Sept11Air.ts.3yrs, xlab = "Time", ylab = "Air RPM (000s)", ylim = c(20000000, 70000000))
+
+#Change the scale for Rail
+Sept11Rail.ts.3yrs <- window(Sept11Rail.ts, start = c(1999, 1), end = c(2001, 8))
+plot(Sept11Rail.ts.3yrs, xlab = "Time", ylab = "Rail PM", ylim = c(300000000, 700000000))
+
+#Change the scale for Car
+Sept11Car.ts.3yrs <- window(Sept11Car.ts, start = c(1999, 1), end = c(2001, 8))
+plot(Sept11Car.ts.3yrs, xlab = "Time", ylab = "VMT (billions)", ylim = c(150, 270))
+```
+
+2.2.Add trendlines and suppress seasonality to better visualize the trend pattern. 
+```{r}
+#Add trendline for Air
+Sept11Air.lm <- forecast::tslm(Sept11Air.ts ~ trend + I(trend^2))
+plot(Sept11Air.ts, xlab = "Time", ylab = "Air RPM (000s)", ylim = c(20000000, 70000000))
+lines(Sept11Air.lm$fitted, lwd = 1)
+
+#Add trendline for Rail
+Sept11Rail.lm <- forecast::tslm(Sept11Rail.ts ~ trend + I(trend^2))
+plot(Sept11Rail.ts, xlab = "Time", ylab = "Rail PM", ylim = c(300000000, 700000000))
+lines(Sept11Rail.lm$fitted, lwd = 1)
+
+#Add trendline for Car
+Sept11Car.lm <- forecast::tslm(Sept11Car.ts ~ trend + I(trend^2))
+plot(Sept11Car.ts, xlab = "Time", ylab = "VMT (billions)", ylim = c(150, 270))
+lines(Sept11Car.lm$fitted, lwd = 1)
+```
+
