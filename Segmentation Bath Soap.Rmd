@@ -1,0 +1,95 @@
+
+```{r}
+data <- read.csv("D:\\BathSoap.csv")
+
+```
+
+# Q1 k-means Cluster
+```{r}
+library(NbClust)
+library(caret)
+set.seed(1234)
+
+data = lapply(data, as.numeric)
+data = as.data.frame(data)
+
+Preprocessed <- preProcess(data,method = "medianImpute")
+data <- predict(Preprocessed,data)
+```
+
+# Q1a
+```{r}
+# Find best number of clusters
+Data1 = data[,c(2:35)]
+nc <- NbClust(data = Data1,distance = "euclidean", min.nc = 2,max.nc = 5,method = "kmeans",index = "all", alphaBeale = 0.1) 
+
+barplot(table(nc$Best.n[1,]),
+        xlab = "Number of Clusters", ylab = "Number of criteria",
+        main = "Number of clusters")
+
+set.seed(1234)
+fit.km1 <- kmeans(Data1,3,nstart = 30)
+fit.km1
+barplot(table(fit.km1$cluster),
+        xlab = "Number of Clusters", ylab = "Cluster Size",
+        main = "Number of clusters chosen by 9 Criteria")
+
+fit.km1$cluster 
+```
+
+# Q1b
+```{r}
+Data2 = data[,c(36:46)]
+nc <- NbClust(data = Data2,distance = "euclidean", min.nc = 2,max.nc = 5,method = "kmeans",index = "all", alphaBeale = 0.1) 
+
+barplot(table(nc$Best.n[1,]),
+        xlab = "Number of Clusters", ylab = "Number of criteria",
+        main = "Number of clusters")
+
+set.seed(1234)
+fit.km2 <- kmeans(Data2,3,nstart = 30)
+fit.km2
+barplot(table(fit.km2$cluster),
+        xlab = "Number of Clusters", ylab = "Cluster Size",
+        main = "Number of clusters chosen by 9 Criteria")
+
+fit.km2$cluster
+```
+
+# Q1c
+```{r}
+Data3 = data[,c(18:46)]
+nc <- NbClust(data = Data3,distance = "euclidean", min.nc = 2,max.nc = 5,method = "kmeans",index = "all", alphaBeale = 0.1) 
+
+barplot(table(nc$Best.n[1,]),
+        xlab = "Number of Clusters", ylab = "Number of criteria",
+        main = "Number of clusters")
+
+set.seed(1234)
+fit.km3 <- kmeans(Data3,3,nstart = 30)
+fit.km3
+barplot(table(fit.km3$cluster),
+        xlab = "Number of Clusters", ylab = "Cluster Size",
+        main = "Number of clusters chosen by 9 Criteria")
+
+fit.km3$cluster
+```
+
+# Q2
+```{r}
+mean(dist(fit.km1$centers))
+mean(dist(fit.km2$centers))
+mean(dist(fit.km3$centers))
+#The more is the better
+```
+Since Cluster1 is the largest, I prefer choose Cluster1 as the best segmentation. 
+People in higher socioeconomic class usually has higher education, and less number of members in household, and have lower weighted value of durables possessed. At the same time, they usually keep less kinds of brand when purchasing, which means they have more brand loyalty. 
+
+# Q3
+```{r}
+library(FNN)
+Data=Data1[2:35,]
+(pred.knn <- get.knnx(fit.km1$center, Data, 1)$nn.index[,1])
+```
+
+
